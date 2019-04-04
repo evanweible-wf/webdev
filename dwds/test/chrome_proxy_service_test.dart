@@ -26,7 +26,8 @@ void main() {
   int port;
 
   setUpAll(() async {
-    port = await findUnusedPort();
+    // port = await findUnusedPort();
+    port = 9876;
     try {
       chromeDriver = await Process.start(
           'chromedriver', ['--port=4444', '--url-base=wd/hub']);
@@ -35,18 +36,18 @@ void main() {
           'Could not start ChromeDriver. Is it installed?\nError: $e');
     }
 
-    await Process.run('pub', ['global', 'activate', 'webdev']);
-    webdev = await Process.start(
-        'pub', ['global', 'run', 'webdev', 'serve', 'example:$port']);
-    webdev.stderr
-        .transform(const Utf8Decoder())
-        .transform(const LineSplitter())
-        .listen(printOnFailure);
-    await webdev.stdout
-        .transform(const Utf8Decoder())
-        .transform(const LineSplitter())
-        .takeWhile((line) => !line.contains('$port'))
-        .drain();
+    // await Process.run('pub', ['global', 'activate', 'webdev']);
+    // webdev = await Process.start(
+    //     'pub', ['global', 'run', 'webdev', 'serve', 'example:$port']);
+    // webdev.stderr
+    //     .transform(const Utf8Decoder())
+    //     .transform(const LineSplitter())
+    //     .listen(printOnFailure);
+    // await webdev.stdout
+    //     .transform(const Utf8Decoder())
+    //     .transform(const LineSplitter())
+    //     .takeWhile((line) => !line.contains('$port'))
+    //     .drain();
     appUrl = 'http://localhost:$port/hello_world/';
     var debugPort = await findUnusedPort();
     webDriver = await createDriver(desired: {
@@ -85,25 +86,45 @@ void main() {
   });
 
   tearDownAll(() async {
-    webdev.kill();
-    await webdev.exitCode;
+    // webdev.kill();
+    // await webdev.exitCode;
     await webDriver?.quit();
     chromeDriver.kill();
   });
 
-  test('addBreakPoint', () {
-    expect(() => service.addBreakpoint(null, null, null),
-        throwsUnimplementedError);
-  });
+  group('breakpoints', () {
+    VM vm;
+    Isolate isolate;
+    ScriptList scripts;
+    ScriptRef mainScript;
 
-  test('addBreakpointAtEntry', () {
-    expect(() => service.addBreakpointAtEntry(null, null),
-        throwsUnimplementedError);
-  });
+    setUp(() async {
+      vm = await service.getVM();
+      isolate = await service.getIsolate(vm.isolates.first.id) as Isolate;
+      scripts = await service.getScripts(isolate.id);
+      mainScript =
+          scripts.scripts.firstWhere((each) => each.uri.contains('main.dart'));
+    });
 
-  test('addBreakpointWithScriptUri', () {
-    expect(() => service.addBreakpointWithScriptUri(null, null, null),
-        throwsUnimplementedError);
+    test('addBreakPoint', () async {
+      //  ### separately test - setting breakpoint and the JS/dart position is right.
+      // Returning the SourceLocation (i.e. token position)
+      await service.addBreakpoint(isolate.id, mainScript.id, 19);
+      var breakpoints = isolate.breakpoints;
+      expect(breakpoints, isNotEmpty);
+      expect (breakpoints.any((b) => b.location.tokenPos == 42), isNotNull);
+      
+     });
+
+    test('addBreakpointAtEntry', () {
+      expect(() => service.addBreakpointAtEntry(null, null),
+          throwsUnimplementedError);
+    });
+
+    test('addBreakpointWithScriptUri', () {
+      expect(() => service.addBreakpointWithScriptUri(null, null, null),
+          throwsUnimplementedError);
+    });
   });
 
   group('callServiceExtension', () {
