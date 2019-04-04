@@ -18,8 +18,7 @@ class TestContext {
   int port;
 
   Future<void> setUp() async {
-   // port = await findUnusedPort();
-    port = 9876;
+    port = await findUnusedPort();
     try {
       chromeDriver = await Process.start(
           'chromedriver', ['--port=4444', '--url-base=wd/hub']);
@@ -28,18 +27,18 @@ class TestContext {
           'Could not start ChromeDriver. Is it installed?\nError: $e');
     }
 
-  //  await Process.run('pub', ['global', 'activate', 'webdev']);
-    // webdev = await Process.start(
-    //     'pub', ['global', 'run', 'webdev', 'serve', 'example:$port']);
-    // webdev.stderr
-    //     .transform(const Utf8Decoder())
-    //     .transform(const LineSplitter())
-    //     .listen(printOnFailure);
-    // await webdev.stdout
-    //     .transform(const Utf8Decoder())
-    //     .transform(const LineSplitter())
-    //     .takeWhile((line) => !line.contains('$port'))
-    //     .drain();
+    await Process.run('pub', ['global', 'activate', 'webdev']);
+    webdev = await Process.start(
+        'pub', ['global', 'run', 'webdev', 'serve', 'example:$port']);
+    webdev.stderr
+        .transform(const Utf8Decoder())
+        .transform(const LineSplitter())
+        .listen(printOnFailure);
+    await webdev.stdout
+        .transform(const Utf8Decoder())
+        .transform(const LineSplitter())
+        .takeWhile((line) => !line.contains('$port'))
+        .drain();
     appUrl = 'http://localhost:$port/hello_world/';
     var debugPort = await findUnusedPort();
     webDriver = await createDriver(desired: {
@@ -78,8 +77,8 @@ class TestContext {
   }
 
   Future<Null> tearDown() async {
-    webdev?.kill();
-    await webdev?.exitCode;
+    webdev.kill();
+    await webdev.exitCode;
     await webDriver?.quit();
     chromeDriver.kill();
   }
