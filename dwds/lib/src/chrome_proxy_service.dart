@@ -141,12 +141,12 @@ class ChromeProxyService implements VmServiceInterface {
     _vm.isolates.add(isolateRef);
     _isolate = isolate;
 
-    _streamNotify(
+    streamNotify(
         'Isolate',
         Event()
           ..kind = EventKind.kIsolateStart
           ..isolate = isolateRef);
-    _streamNotify(
+    streamNotify(
         'Isolate',
         Event()
           ..kind = EventKind.kIsolateRunnable
@@ -156,7 +156,7 @@ class ChromeProxyService implements VmServiceInterface {
     // isolate, but devtools doesn't recognize extensions after a page refresh
     // otherwise.
     for (var extensionRpc in isolate.extensionRPCs) {
-      _streamNotify(
+      streamNotify(
           'Isolate',
           Event()
             ..kind = EventKind.kServiceExtensionAdded
@@ -170,7 +170,7 @@ class ChromeProxyService implements VmServiceInterface {
   /// Clears out [_isolate] and all related cached information.
   void destroyIsolate() {
     if (_isolate == null) return;
-    _streamNotify(
+    streamNotify(
         'Isolate',
         Event()
           ..kind = EventKind.kIsolateExit
@@ -595,7 +595,7 @@ require("dart_sdk").developer.invokeExtension(
   @override
   Future<Success> setVMName(String name) async {
     _vm.name = name;
-    _streamNotify(
+    streamNotify(
         'VM',
         Event()
           ..kind = EventKind.kVMUpdate
@@ -684,11 +684,11 @@ require("dart_sdk").developer.invokeExtension(
         } else {
           event.kind = EventKind.kPauseInterrupted;
         }
-        _streamNotify('Debug', event);
+        streamNotify('Debug', event);
       });
       resumeSubscription = tabConnection.debugger.onResumed.listen((e) {
         if (_isolate == null) return;
-        _streamNotify(
+        streamNotify(
             'Debug',
             Event()
               ..kind = EventKind.kResume
@@ -731,7 +731,7 @@ require("dart_sdk").developer.invokeExtension(
         case 'dart.developer.registerExtension':
           var service = event.args[1].value as String;
           _isolate.extensionRPCs.add(service);
-          _streamNotify(
+          streamNotify(
               'Isolate',
               Event()
                 ..kind = EventKind.kServiceExtensionAdded
@@ -739,7 +739,7 @@ require("dart_sdk").developer.invokeExtension(
                 ..isolate = isolateRef);
           break;
         case 'dart.developer.postEvent':
-          _streamNotify(
+          streamNotify(
               'Extension',
               Event()
                 ..kind = EventKind.kExtension
@@ -758,7 +758,7 @@ require("dart_sdk").developer.invokeExtension(
             // TODO: A real classref? we need something here so it can properly
             // serialize, but it isn't used by the widget inspector.
             ..classRef = ClassRef();
-          _streamNotify(
+          streamNotify(
               'Debug',
               Event()
                 ..kind = EventKind.kInspect
@@ -774,7 +774,7 @@ require("dart_sdk").developer.invokeExtension(
 
   /// Adds [event] to the stream with [streamId] if there is anybody listening
   /// on that stream.
-  void _streamNotify(String streamId, Event event) {
+  void streamNotify(String streamId, Event event) {
     var controller = _streamControllers[streamId];
     if (controller == null) return;
     controller.add(event);
