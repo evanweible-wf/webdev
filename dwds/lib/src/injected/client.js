@@ -479,10 +479,10 @@
     }, _$ConnectRequest: function _$ConnectRequest(t0, t1, t2) {
       this.appId = t0;
       this.instanceId = t1;
-      this.entrypointPath = t2;
+      this.entrypointPaths = t2;
     }, ConnectRequestBuilder: function ConnectRequestBuilder() {
       var _ = this;
-      _._entrypointPath = _._instanceId = _._appId = _._$v = null;
+      _._entrypointPaths = _._instanceId = _._appId = _._$v = null;
     }, WebSocketChannelException: function WebSocketChannelException(t0) {
       this.message = t0;
     }},
@@ -4157,6 +4157,7 @@
     }, RegExpSerializer: function RegExpSerializer(t0) {
       this.types = t0;
     }, _$serializers_closure: function _$serializers_closure() {
+    }, _$serializers_closure0: function _$serializers_closure0() {
     },
     GuaranteeChannel$(innerStream, innerSink, allowSinkErrors, $T) {
       var t2, t1 = {};
@@ -9143,6 +9144,9 @@
     BuiltValueNullFieldError$(type, field) {
       return new Y.BuiltValueNullFieldError(type, field);
     },
+    BuiltValueNestedFieldError$(type, field, error) {
+      return new Y.BuiltValueNestedFieldError(type, field, error);
+    },
     EnumClass: function EnumClass() {
     },
     newBuiltValueToStringHelper_closure: function newBuiltValueToStringHelper_closure() {
@@ -11044,7 +11048,7 @@
     call$1(tag) {
       return this.prototypeForTag(H._asStringS(tag));
     },
-    $signature: 82
+    $signature: 83
   };
   H.JSSyntaxRegExp.prototype = {
     toString$0(_) {
@@ -11961,7 +11965,7 @@
     call$1(_) {
       return this.originalSource;
     },
-    $signature: 99
+    $signature: 100
   };
   P._Future__propagateToListeners_handleValueCallback.prototype = {
     call$0() {
@@ -13293,7 +13297,7 @@
           t3._processUncaughtError$3(zone, e, t1._as(s));
       }
     },
-    $signature: 61
+    $signature: 62
   };
   P._HashMap.prototype = {
     get$length(_) {
@@ -16416,7 +16420,7 @@
         t1._contents += H.S(P._Uri__uriEncode(C.List_nxB, value, C.C_Utf8Codec, true));
       }
     },
-    $signature: 62
+    $signature: 63
   };
   P._Uri__makeQuery_closure.prototype = {
     call$2(key, value) {
@@ -16469,7 +16473,7 @@
       C.NativeUint8List_methods.fillRange$3(t1, 0, 96, defaultTransition);
       return t1;
     },
-    $signature: 81
+    $signature: 82
   };
   P._createTables_setChars.prototype = {
     call$3(target, chars, transition) {
@@ -16942,7 +16946,7 @@
     call$1(e) {
       return type$.Element._is(type$.Node._as(e));
     },
-    $signature: 33
+    $signature: 99
   };
   W.Event.prototype = {$isEvent: 1};
   W.EventSource.prototype = {$isEventSource: 1};
@@ -17075,7 +17079,7 @@
       else
         t3.completeError$1(e);
     },
-    $signature: 34
+    $signature: 33
   };
   W.HttpRequestEventTarget.prototype = {};
   W.ImageData.prototype = {$isImageData: 1};
@@ -21766,31 +21770,51 @@
   E._$ConnectRequestSerializer.prototype = {
     serialize$3$specifiedType(serializers, object, specifiedType) {
       type$.legacy_ConnectRequest._as(object);
-      return H._setArrayType(["appId", serializers.serialize$2$specifiedType(object.appId, C.FullType_h8g), "instanceId", serializers.serialize$2$specifiedType(object.instanceId, C.FullType_h8g), "entrypointPath", serializers.serialize$2$specifiedType(object.entrypointPath, C.FullType_h8g)], type$.JSArray_legacy_Object);
+      return H._setArrayType(["appId", serializers.serialize$2$specifiedType(object.appId, C.FullType_h8g), "instanceId", serializers.serialize$2$specifiedType(object.instanceId, C.FullType_h8g), "entrypointPaths", serializers.serialize$2$specifiedType(object.entrypointPaths, C.FullType_6m4)], type$.JSArray_legacy_Object);
     },
     serialize$2(serializers, object) {
       return this.serialize$3$specifiedType(serializers, object, C.FullType_null_List_empty_false);
     },
     deserialize$3$specifiedType(serializers, serialized, specifiedType) {
-      var key, value, t1,
+      var t1, t2, t3, t4, key, value, t5, t6, t7, t8, t9,
         result = new E.ConnectRequestBuilder(),
         iterator = J.get$iterator$ax(type$.legacy_Iterable_legacy_Object._as(serialized));
-      for (; iterator.moveNext$0();) {
+      for (t1 = type$.legacy_BuiltList_legacy_Object, t2 = type$.legacy_String, t3 = type$.List_legacy_String, t4 = type$.ListBuilder_legacy_String; iterator.moveNext$0();) {
         key = H._asStringS(iterator.get$current(iterator));
         iterator.moveNext$0();
         value = iterator.get$current(iterator);
         switch (key) {
           case "appId":
-            t1 = H._asStringS(serializers.deserialize$2$specifiedType(value, C.FullType_h8g));
-            result.get$_$this()._appId = t1;
+            t5 = H._asStringS(serializers.deserialize$2$specifiedType(value, C.FullType_h8g));
+            result.get$_$this()._appId = t5;
             break;
           case "instanceId":
-            t1 = H._asStringS(serializers.deserialize$2$specifiedType(value, C.FullType_h8g));
-            result.get$_$this()._instanceId = t1;
+            t5 = H._asStringS(serializers.deserialize$2$specifiedType(value, C.FullType_h8g));
+            result.get$_$this()._instanceId = t5;
             break;
-          case "entrypointPath":
-            t1 = H._asStringS(serializers.deserialize$2$specifiedType(value, C.FullType_h8g));
-            result.get$_$this()._entrypointPath = t1;
+          case "entrypointPaths":
+            t5 = result.get$_$this();
+            t6 = t5._entrypointPaths;
+            if (t6 == null) {
+              t6 = new D.ListBuilder(t4);
+              t6.set$__ListBuilder__list(t3._as(P.List_List$from(C.List_empty0, true, t2)));
+              t6.set$_listOwner(null);
+              t5.set$_entrypointPaths(t6);
+              t5 = t6;
+            } else
+              t5 = t6;
+            t6 = t1._as(serializers.deserialize$2$specifiedType(value, C.FullType_6m4));
+            t7 = t5.$ti;
+            t8 = t7._eval$1("_BuiltList<1>");
+            t9 = t7._eval$1("List<1>");
+            if (t8._is(t6)) {
+              t8._as(t6);
+              t5.set$__ListBuilder__list(t9._as(t6._list));
+              t5.set$_listOwner(t6);
+            } else {
+              t5.set$__ListBuilder__list(t9._as(P.List_List$from(t6, true, t7._precomputed1)));
+              t5.set$_listOwner(null);
+            }
             break;
         }
       }
@@ -21815,49 +21839,85 @@
         return false;
       if (other === _this)
         return true;
-      return other instanceof E.ConnectRequest && _this.appId === other.appId && _this.instanceId === other.instanceId && _this.entrypointPath === other.entrypointPath;
+      return other instanceof E.ConnectRequest && _this.appId === other.appId && _this.instanceId === other.instanceId && J.$eq$(_this.entrypointPaths, other.entrypointPaths);
     },
     get$hashCode(_) {
-      return Y.$jf(Y.$jc(Y.$jc(Y.$jc(0, C.JSString_methods.get$hashCode(this.appId)), C.JSString_methods.get$hashCode(this.instanceId)), C.JSString_methods.get$hashCode(this.entrypointPath)));
+      return Y.$jf(Y.$jc(Y.$jc(Y.$jc(0, C.JSString_methods.get$hashCode(this.appId)), C.JSString_methods.get$hashCode(this.instanceId)), J.get$hashCode$(this.entrypointPaths)));
     },
     toString$0(_) {
       var t1 = $.$get$newBuiltValueToStringHelper().call$1("ConnectRequest"),
         t2 = J.getInterceptor$ax(t1);
       t2.add$2(t1, "appId", this.appId);
       t2.add$2(t1, "instanceId", this.instanceId);
-      t2.add$2(t1, "entrypointPath", this.entrypointPath);
+      t2.add$2(t1, "entrypointPaths", this.entrypointPaths);
       return t2.toString$0(t1);
     }
   };
   E.ConnectRequestBuilder.prototype = {
+    get$entrypointPaths() {
+      var t1 = this.get$_$this(),
+        t2 = t1._entrypointPaths;
+      if (t2 == null) {
+        t2 = D.ListBuilder_ListBuilder(C.List_empty0, type$.legacy_String);
+        t1.set$_entrypointPaths(t2);
+        t1 = t2;
+      } else
+        t1 = t2;
+      return t1;
+    },
     get$_$this() {
-      var _this = this,
+      var t1, _this = this,
         $$v = _this._$v;
       if ($$v != null) {
         _this._appId = $$v.appId;
         _this._instanceId = $$v.instanceId;
-        _this._entrypointPath = $$v.entrypointPath;
+        t1 = $$v.entrypointPaths;
+        t1.toString;
+        _this.set$_entrypointPaths(D.ListBuilder_ListBuilder(t1, t1.$ti._precomputed1));
         _this._$v = null;
       }
       return _this;
     },
     build$0() {
-      var t1, t2, t3, _this = this,
+      var _$failedField, e, _$result0, t1, t2, t3, exception, _this = this,
         _s14_ = "ConnectRequest",
-        _$result = _this._$v;
-      if (_$result == null) {
-        t1 = _this.get$_$this()._appId;
-        if (t1 == null)
-          H.throwExpression(Y.BuiltValueNullFieldError$(_s14_, "appId"));
-        t2 = _this.get$_$this()._instanceId;
-        if (t2 == null)
-          H.throwExpression(Y.BuiltValueNullFieldError$(_s14_, "instanceId"));
-        t3 = _this.get$_$this()._entrypointPath;
-        if (t3 == null)
-          H.throwExpression(Y.BuiltValueNullFieldError$(_s14_, "entrypointPath"));
-        _$result = new E._$ConnectRequest(t1, t2, t3);
+        _$result = null;
+      try {
+        _$result0 = _this._$v;
+        if (_$result0 == null) {
+          t1 = _this.get$_$this()._appId;
+          if (t1 == null)
+            H.throwExpression(Y.BuiltValueNullFieldError$(_s14_, "appId"));
+          t2 = _this.get$_$this()._instanceId;
+          if (t2 == null)
+            H.throwExpression(Y.BuiltValueNullFieldError$(_s14_, "instanceId"));
+          t3 = _this.get$entrypointPaths().build$0();
+          _$result0 = new E._$ConnectRequest(t1, t2, t3);
+          if (t3 == null)
+            H.throwExpression(Y.BuiltValueNullFieldError$(_s14_, "entrypointPaths"));
+        }
+        _$result = _$result0;
+      } catch (exception) {
+        H.unwrapException(exception);
+        _$failedField = null;
+        try {
+          _$failedField = "entrypointPaths";
+          _this.get$entrypointPaths().build$0();
+        } catch (exception) {
+          e = H.unwrapException(exception);
+          t1 = Y.BuiltValueNestedFieldError$(_s14_, _$failedField, J.toString$0$(e));
+          throw H.wrapException(t1);
+        }
+        throw exception;
       }
-      return _this._$v = _$result;
+      t1 = type$.legacy_ConnectRequest._as(_$result);
+      if (t1 == null)
+        H.throwExpression(P.ArgumentError$notNull("other"));
+      _this._$v = t1;
+      return _$result;
+    },
+    set$_entrypointPaths(_entrypointPaths) {
+      this._entrypointPaths = type$.legacy_ListBuilder_legacy_String._as(_entrypointPaths);
     }
   };
   G.DebugEvent.prototype = {};
@@ -22679,7 +22739,7 @@
       return t1;
     },
     build$0() {
-      var _$failedField, e, _$result0, t1, exception, t2, _this = this,
+      var _$failedField, e, _$result0, t1, exception, _this = this,
         _s13_ = "BatchedEvents",
         _$result = null;
       try {
@@ -22699,9 +22759,8 @@
           _this.get$events().build$0();
         } catch (exception) {
           e = H.unwrapException(exception);
-          t1 = _$failedField;
-          t2 = J.toString$0$(e);
-          throw H.wrapException(new Y.BuiltValueNestedFieldError(_s13_, t1, t2));
+          t1 = Y.BuiltValueNestedFieldError$(_s13_, _$failedField, J.toString$0$(e));
+          throw H.wrapException(t1);
         }
         throw exception;
       }
@@ -22957,6 +23016,12 @@
     },
     $signature: 57
   };
+  K._$serializers_closure0.prototype = {
+    call$0() {
+      return D.ListBuilder_ListBuilder(C.List_empty0, type$.legacy_String);
+    },
+    $signature: 58
+  };
   R.SocketClient.prototype = {};
   R.SseSocketClient.prototype = {
     get$sink() {
@@ -22984,7 +23049,7 @@
     call$1(o) {
       return o == null ? null : J.toString$0$(o);
     },
-    $signature: 58
+    $signature: 59
   };
   V.Int64.prototype = {
     $add(_, other) {
@@ -23228,7 +23293,7 @@
         $parent._children.$indexSet(0, thisName, t1);
       return t1;
     },
-    $signature: 59
+    $signature: 60
   };
   O.Pool.prototype = {
     request$0(_) {
@@ -23947,7 +24012,7 @@
         data = H.NativeUint8List_NativeUint8List$view(data, 0, null);
       this.$this._html$_controller.get$_local().get$sink().add$1(0, data);
     },
-    $signature: 63
+    $signature: 64
   };
   A.HtmlWebSocketChannel_closure2.prototype = {
     call$1($event) {
@@ -23956,7 +24021,7 @@
       $event.reason;
       this.$this._html$_controller.get$_local().get$sink().close$0(0);
     },
-    $signature: 64
+    $signature: 65
   };
   A.HtmlWebSocketChannel__listen_closure.prototype = {
     call$0() {
@@ -24061,13 +24126,13 @@
       });
       return P._asyncStartSync($async$call$0, $async$completer);
     },
-    $signature: 83
+    $signature: 84
   };
   D.main__closure.prototype = {
     call$0() {
       return S.toPromise(this.manager.hotRestart$0(), type$.legacy_bool);
     },
-    $signature: 66
+    $signature: 67
   };
   D.main__closure0.prototype = {
     call$2(kind, eventData) {
@@ -24080,7 +24145,7 @@
       type$.legacy_void_Function_legacy_DebugEventBuilder._as(new D.main___closure1(kind, eventData)).call$1(t3);
       t1.add$1(0, C.C_JsonCodec.encode$2$toEncodable(t2.serialize$1(t3.build$0()), null));
     },
-    $signature: 67
+    $signature: 68
   };
   D.main___closure1.prototype = {
     call$1(b) {
@@ -24090,7 +24155,7 @@
       b.get$_debug_event$_$this()._eventData = this.eventData;
       return b;
     },
-    $signature: 68
+    $signature: 69
   };
   D.main__closure1.prototype = {
     call$1(eventData) {
@@ -24102,7 +24167,7 @@
       type$.legacy_void_Function_legacy_RegisterEventBuilder._as(new D.main___closure0(eventData)).call$1(t3);
       t1.add$1(0, C.C_JsonCodec.encode$2$toEncodable(t2.serialize$1(t3.build$0()), null));
     },
-    $signature: 69
+    $signature: 70
   };
   D.main___closure0.prototype = {
     call$1(b) {
@@ -24111,7 +24176,7 @@
       b.get$_register_event$_$this()._register_event$_eventData = this.eventData;
       return b;
     },
-    $signature: 70
+    $signature: 71
   };
   D.main__closure2.prototype = {
     call$0() {
@@ -24136,7 +24201,7 @@
       b.get$_devtools_request$_$this()._devtools_request$_instanceId = t1;
       return b;
     },
-    $signature: 71
+    $signature: 72
   };
   D.main__closure3.prototype = {
     call$1(serialized) {
@@ -24215,7 +24280,7 @@
       });
       return P._asyncStartSync($async$call$1, $async$completer);
     },
-    $signature: 72
+    $signature: 73
   };
   D.main__closure4.prototype = {
     call$1(error) {
@@ -24229,7 +24294,7 @@
         self.$launchDevTools.call$0();
       }
     },
-    $signature: 73
+    $signature: 74
   };
   D.main__closure6.prototype = {
     call$1(b) {
@@ -24237,18 +24302,19 @@
       b.get$_$this()._appId = t1;
       t1 = H._asStringS(self.$dartAppInstanceId);
       b.get$_$this()._instanceId = t1;
-      t1 = H._asStringS(self.$dartEntrypointPath);
-      b.get$_$this()._entrypointPath = t1;
+      t1 = type$.legacy_String;
+      t1 = type$.legacy_ListBuilder_legacy_String._as(D.ListBuilder_ListBuilder(P.List_List$from(J.cast$1$0$ax(self.$dartEntrypointPaths, t1), true, t1), t1));
+      b.get$_$this().set$_entrypointPaths(t1);
       return b;
     },
-    $signature: 74
+    $signature: 75
   };
   D.main_closure0.prototype = {
     call$2(error, stackTrace) {
       type$.legacy_StackTrace._as(stackTrace);
       P.print("Unhandled error detected in the injected client.js script.\n\nYou can disable this script in webdev by passing --no-injected-client if it\nis preventing your app from loading, but note that this will also prevent\nall debugging and hot reload/restart functionality from working.\n\nThe original error is below, please file an issue at\nhttps://github.com/dart-lang/webdev/issues/new and attach this output:\n\n" + H.S(error) + "\n" + H.S(stackTrace) + "\n");
     },
-    $signature: 75
+    $signature: 76
   };
   Z.LegacyRestarter.prototype = {
     restart$0() {
@@ -24300,7 +24366,7 @@
         this._box_0.sub.cancel$0(0);
       }
     },
-    $signature: 76
+    $signature: 77
   };
   Q.ReloadingManager.prototype = {
     hotRestart$0() {
@@ -24687,7 +24753,7 @@
     call$1(e) {
       return this.completer.completeError$2(new X.HotReloadFailedException(J.get$message$x(type$.legacy_JsError._as(e))), this.stackTrace);
     },
-    $signature: 79
+    $signature: 80
   };
   V._createScript_closure.prototype = {
     call$0() {
@@ -24696,7 +24762,7 @@
         return new V._createScript__closure();
       return new V._createScript__closure0(nonce);
     },
-    $signature: 80
+    $signature: 81
   };
   V._createScript__closure.prototype = {
     call$0() {
@@ -24766,38 +24832,38 @@
     _static_1(P, "async___nullDataHandler$closure", "_nullDataHandler", 5);
     _static_2(P, "async___nullErrorHandler$closure", "_nullErrorHandler", 16);
     _static_0(P, "async___nullDoneHandler$closure", "_nullDoneHandler", 0);
-    _static(P, "async___rootHandleUncaughtError$closure", 5, null, ["call$5"], ["_rootHandleUncaughtError"], 84, 0);
+    _static(P, "async___rootHandleUncaughtError$closure", 5, null, ["call$5"], ["_rootHandleUncaughtError"], 85, 0);
     _static(P, "async___rootRun$closure", 4, null, ["call$1$4", "call$4"], ["_rootRun", function($self, $parent, zone, f) {
       return P._rootRun($self, $parent, zone, f, type$.dynamic);
-    }], 85, 1);
+    }], 86, 1);
     _static(P, "async___rootRunUnary$closure", 5, null, ["call$2$5", "call$5"], ["_rootRunUnary", function($self, $parent, zone, f, arg) {
       return P._rootRunUnary($self, $parent, zone, f, arg, type$.dynamic, type$.dynamic);
-    }], 86, 1);
+    }], 87, 1);
     _static(P, "async___rootRunBinary$closure", 6, null, ["call$3$6", "call$6"], ["_rootRunBinary", function($self, $parent, zone, f, arg1, arg2) {
       return P._rootRunBinary($self, $parent, zone, f, arg1, arg2, type$.dynamic, type$.dynamic, type$.dynamic);
-    }], 87, 1);
+    }], 88, 1);
     _static(P, "async___rootRegisterCallback$closure", 4, null, ["call$1$4", "call$4"], ["_rootRegisterCallback", function($self, $parent, zone, f) {
       return P._rootRegisterCallback($self, $parent, zone, f, type$.dynamic);
-    }], 88, 0);
+    }], 89, 0);
     _static(P, "async___rootRegisterUnaryCallback$closure", 4, null, ["call$2$4", "call$4"], ["_rootRegisterUnaryCallback", function($self, $parent, zone, f) {
       return P._rootRegisterUnaryCallback($self, $parent, zone, f, type$.dynamic, type$.dynamic);
-    }], 89, 0);
+    }], 90, 0);
     _static(P, "async___rootRegisterBinaryCallback$closure", 4, null, ["call$3$4", "call$4"], ["_rootRegisterBinaryCallback", function($self, $parent, zone, f) {
       return P._rootRegisterBinaryCallback($self, $parent, zone, f, type$.dynamic, type$.dynamic, type$.dynamic);
-    }], 90, 0);
-    _static(P, "async___rootErrorCallback$closure", 5, null, ["call$5"], ["_rootErrorCallback"], 91, 0);
-    _static(P, "async___rootScheduleMicrotask$closure", 4, null, ["call$4"], ["_rootScheduleMicrotask"], 92, 0);
-    _static(P, "async___rootCreateTimer$closure", 5, null, ["call$5"], ["_rootCreateTimer"], 93, 0);
-    _static(P, "async___rootCreatePeriodicTimer$closure", 5, null, ["call$5"], ["_rootCreatePeriodicTimer"], 94, 0);
-    _static(P, "async___rootPrint$closure", 4, null, ["call$4"], ["_rootPrint"], 95, 0);
-    _static_1(P, "async___printToZone$closure", "_printToZone", 96);
-    _static(P, "async___rootFork$closure", 5, null, ["call$5"], ["_rootFork"], 97, 0);
+    }], 91, 0);
+    _static(P, "async___rootErrorCallback$closure", 5, null, ["call$5"], ["_rootErrorCallback"], 92, 0);
+    _static(P, "async___rootScheduleMicrotask$closure", 4, null, ["call$4"], ["_rootScheduleMicrotask"], 93, 0);
+    _static(P, "async___rootCreateTimer$closure", 5, null, ["call$5"], ["_rootCreateTimer"], 94, 0);
+    _static(P, "async___rootCreatePeriodicTimer$closure", 5, null, ["call$5"], ["_rootCreatePeriodicTimer"], 95, 0);
+    _static(P, "async___rootPrint$closure", 4, null, ["call$4"], ["_rootPrint"], 96, 0);
+    _static_1(P, "async___printToZone$closure", "_printToZone", 97);
+    _static(P, "async___rootFork$closure", 5, null, ["call$5"], ["_rootFork"], 98, 0);
     _instance(P._Completer.prototype, "get$completeError", 0, 1, function() {
       return [null];
     }, ["call$2", "call$1"], ["completeError$2", "completeError$1"], 15, 0, 0);
     _instance(P._AsyncCompleter.prototype, "get$complete", 1, 0, function() {
       return [null];
-    }, ["call$1", "call$0"], ["complete$1", "complete$0"], 98, 0, 0);
+    }, ["call$1", "call$0"], ["complete$1", "complete$0"], 34, 0, 0);
     _instance_2_u(P._Future.prototype, "get$_completeError", "_completeError$2", 16);
     var _;
     _instance_1_i(_ = P._StreamController.prototype, "get$add", "add$1", 17);
@@ -24828,13 +24894,13 @@
     _instance_2_u(_ = U.DeepCollectionEquality.prototype, "get$equals", "equals$2", 12);
     _instance_1_i(_, "get$hash", "hash$1", 13);
     _instance_1_u(_, "get$isValidKey", "isValidKey$1", 56);
-    _static_2(L, "strongly_connected_components___defaultEquals$closure", "_defaultEquals0", 65);
+    _static_2(L, "strongly_connected_components___defaultEquals$closure", "_defaultEquals0", 66);
     _instance_1_u(_ = M.SseClient.prototype, "get$_onIncomingControlMessage", "_onIncomingControlMessage$1", 6);
     _instance_1_u(_, "get$_onIncomingMessage", "_onIncomingMessage$1", 6);
     _instance_0_u(_, "get$_onOutgoingDone", "_onOutgoingDone$0", 0);
-    _instance_1_u(_, "get$_onOutgoingMessage", "_onOutgoingMessage$1", 60);
-    _instance_1_u(_ = X.RequireRestarter.prototype, "get$_moduleParents", "_moduleParents$1", 77);
-    _instance_2_u(_, "get$_moduleTopologicalCompare", "_moduleTopologicalCompare$2", 78);
+    _instance_1_u(_, "get$_onOutgoingMessage", "_onOutgoingMessage$1", 61);
+    _instance_1_u(_ = X.RequireRestarter.prototype, "get$_moduleParents", "_moduleParents$1", 78);
+    _instance_2_u(_, "get$_moduleTopologicalCompare", "_moduleTopologicalCompare$2", 79);
   })();
   (function inheritance() {
     var _mixin = hunkHelpers.mixin,
@@ -24856,7 +24922,7 @@
     _inherit(P.MapBase, P.MapMixin);
     _inheritMany(P.MapBase, [H.CastMap, H.JsLinkedHashMap, P._HashMap, P._JsonMap, W._AttributeMap]);
     _inheritMany(P.Error, [H.LateError, H.ReachabilityError, H.NotNullableError, P.TypeError, H.JsNoSuchMethodError, H.UnknownJsTypeError, H.RuntimeError, P.AssertionError, H._Error, P.JsonUnsupportedObjectError, P.NullThrownError, P.ArgumentError, P.NoSuchMethodError, P.UnsupportedError, P.UnimplementedError, P.StateError, P.ConcurrentModificationError, P.CyclicInitializationError, Y.BuiltValueNullFieldError, Y.BuiltValueNestedFieldError, U.DeserializationError]);
-    _inheritMany(H.Closure0Args, [H.nullFuture_closure, P._AsyncRun__scheduleImmediateJsOverride_internalCallback, P._AsyncRun__scheduleImmediateWithSetImmediate_internalCallback, P._TimerImpl_internalCallback, P._TimerImpl$periodic_closure, P.Future_Future$microtask_closure, P._Future__addListener_closure, P._Future__prependListeners_closure, P._Future__chainForeignFuture_closure1, P._Future__asyncCompleteWithValue_closure, P._Future__chainFuture_closure, P._Future__asyncCompleteError_closure, P._Future__propagateToListeners_handleWhenCompleteCallback, P._Future__propagateToListeners_handleValueCallback, P._Future__propagateToListeners_handleError, P.Stream_length_closure0, P.Stream_first_closure, P._StreamController__subscribe_closure, P._StreamController__recordCancel_complete, P._BufferingStreamSubscription_asFuture_closure, P._BufferingStreamSubscription_asFuture__closure, P._BufferingStreamSubscription__sendError_sendError, P._BufferingStreamSubscription__sendDone_sendDone, P._PendingEvents_schedule_closure, P._cancelAndValue_closure, P._CustomZone_bindCallback_closure, P._CustomZone_bindCallbackGuarded_closure, P._rootHandleError_closure, P._RootZone_bindCallback_closure, P._RootZone_bindCallbackGuarded_closure, U.Serializers_Serializers_closure, U.Serializers_Serializers_closure0, U.Serializers_Serializers_closure1, U.Serializers_Serializers_closure2, U.Serializers_Serializers_closure3, K._$serializers_closure, F.Logger_Logger_closure, M.SseClient_closure, M.SseClient__closure, M.SseClient__onOutgoingMessage_closure, K.GuaranteeChannel_closure, K.GuaranteeChannel__closure, A.HtmlWebSocketChannel__listen_closure, D.main_closure, D.main__closure, D.main__closure2, X.RequireRestarter__reload_closure, X.RequireRestarter__reloadModule_closure, V._createScript_closure, V._createScript__closure, V._createScript__closure0]);
+    _inheritMany(H.Closure0Args, [H.nullFuture_closure, P._AsyncRun__scheduleImmediateJsOverride_internalCallback, P._AsyncRun__scheduleImmediateWithSetImmediate_internalCallback, P._TimerImpl_internalCallback, P._TimerImpl$periodic_closure, P.Future_Future$microtask_closure, P._Future__addListener_closure, P._Future__prependListeners_closure, P._Future__chainForeignFuture_closure1, P._Future__asyncCompleteWithValue_closure, P._Future__chainFuture_closure, P._Future__asyncCompleteError_closure, P._Future__propagateToListeners_handleWhenCompleteCallback, P._Future__propagateToListeners_handleValueCallback, P._Future__propagateToListeners_handleError, P.Stream_length_closure0, P.Stream_first_closure, P._StreamController__subscribe_closure, P._StreamController__recordCancel_complete, P._BufferingStreamSubscription_asFuture_closure, P._BufferingStreamSubscription_asFuture__closure, P._BufferingStreamSubscription__sendError_sendError, P._BufferingStreamSubscription__sendDone_sendDone, P._PendingEvents_schedule_closure, P._cancelAndValue_closure, P._CustomZone_bindCallback_closure, P._CustomZone_bindCallbackGuarded_closure, P._rootHandleError_closure, P._RootZone_bindCallback_closure, P._RootZone_bindCallbackGuarded_closure, U.Serializers_Serializers_closure, U.Serializers_Serializers_closure0, U.Serializers_Serializers_closure1, U.Serializers_Serializers_closure2, U.Serializers_Serializers_closure3, K._$serializers_closure, K._$serializers_closure0, F.Logger_Logger_closure, M.SseClient_closure, M.SseClient__closure, M.SseClient__onOutgoingMessage_closure, K.GuaranteeChannel_closure, K.GuaranteeChannel__closure, A.HtmlWebSocketChannel__listen_closure, D.main_closure, D.main__closure, D.main__closure2, X.RequireRestarter__reload_closure, X.RequireRestarter__reloadModule_closure, V._createScript_closure, V._createScript__closure, V._createScript__closure0]);
     _inheritMany(H.EfficientLengthIterable, [H.ListIterable, H.EmptyIterable, H.LinkedHashMapKeyIterable, P._HashMapKeyIterable]);
     _inheritMany(H.ListIterable, [H.SubListIterable, H.MappedListIterable, H.ReversedListIterable, P.ListQueue, P._JsonMapKeyIterable]);
     _inherit(H.EfficientLengthMappedIterable, H.MappedIterable);
@@ -25073,7 +25139,7 @@
     typeUniverse: {eC: new Map(), tR: {}, eT: {}, tPV: {}, sEA: []},
     mangledGlobalNames: {int: "int", double: "double", num: "num", String: "String", bool: "bool", Null: "Null", List: "List"},
     mangledNames: {},
-    types: ["~()", "@(@)", "Null()", "Object?(@)", "~(String,@)", "~(@)", "~(Event)", "Null(@)", "~(@,@)", "Null(Object,StackTrace)", "~(~())", "bool(@)", "bool(Object?,Object?)", "int(Object?)", "bool(Element,String,String,_Html5NodeValidator)", "~(Object[StackTrace?])", "~(Object,StackTrace)", "~(Object?)", "~(Object?,Object?)", "~(Symbol0,@)", "int(int,int)", "int(int)", "String(int)", "String(String)", "~(Uint8List,String,int)", "Future<Null>()", "bool(NodeValidator)", "bool(String)", "Object?(Object?)", "String(int,int)", "Null(Event)", "ScriptElement*()", "int(@,@)", "bool(Node)", "~(ProgressEvent)", "~(String,String)", "@(@,String)", "Null(~())", "Null(@,StackTrace)", "~(Node,Node?)", "Null(@,@)", "@(@,@)", "JsFunction(@)", "JsArray<@>(@)", "JsObject(@)", "int(int,@)", "IndentingBuiltValueToStringHelper(String)", "ListBuilder<Object>()", "ListMultimapBuilder<Object,Object>()", "MapBuilder<Object,Object>()", "SetBuilder<Object>()", "SetMultimapBuilder<Object,Object>()", "~(int,@)", "~(@,StackTrace)", "~(String,int)", "~(String[@])", "bool(Object?)", "ListBuilder<ExtensionEvent*>*()", "String*(@)", "Logger()", "~(String?)", "~(Zone,ZoneDelegate,Zone,Object,StackTrace)", "~(String,String?)", "~(MessageEvent)", "Null(CloseEvent)", "bool(Object,Object)", "Promise<1&>*()", "Null(String*,String*)", "DebugEventBuilder*(DebugEventBuilder*)", "Null(String*)", "RegisterEventBuilder*(RegisterEventBuilder*)", "DevToolsRequestBuilder*(DevToolsRequestBuilder*)", "Future<Null>*(String*)", "Null(Event*)", "ConnectRequestBuilder*(ConnectRequestBuilder*)", "Null(Object*,StackTrace*)", "Null(MessageEvent*)", "List<String*>*(String*)", "int*(String*,String*)", "~(JsError*)", "ScriptElement*()*()", "Uint8List(@,@)", "@(String)", "Future<Null>*()", "~(Zone?,ZoneDelegate?,Zone,Object,StackTrace)", "0^(Zone?,ZoneDelegate?,Zone,0^())<Object?>", "0^(Zone?,ZoneDelegate?,Zone,0^(1^),1^)<Object?Object?>", "0^(Zone?,ZoneDelegate?,Zone,0^(1^,2^),1^,2^)<Object?Object?Object?>", "0^()(Zone,ZoneDelegate,Zone,0^())<Object?>", "0^(1^)(Zone,ZoneDelegate,Zone,0^(1^))<Object?Object?>", "0^(1^,2^)(Zone,ZoneDelegate,Zone,0^(1^,2^))<Object?Object?Object?>", "AsyncError?(Zone,ZoneDelegate,Zone,Object,StackTrace?)", "~(Zone?,ZoneDelegate?,Zone,~())", "Timer(Zone,ZoneDelegate,Zone,Duration,~())", "Timer(Zone,ZoneDelegate,Zone,Duration,~(Timer))", "~(Zone,ZoneDelegate,Zone,String)", "~(String)", "Zone(Zone?,ZoneDelegate?,Zone,ZoneSpecification?,Map<Object?,Object?>?)", "~([Object?])", "_Future<@>(@)"],
+    types: ["~()", "@(@)", "Null()", "Object?(@)", "~(String,@)", "~(@)", "~(Event)", "Null(@)", "~(@,@)", "Null(Object,StackTrace)", "~(~())", "bool(@)", "bool(Object?,Object?)", "int(Object?)", "bool(Element,String,String,_Html5NodeValidator)", "~(Object[StackTrace?])", "~(Object,StackTrace)", "~(Object?)", "~(Object?,Object?)", "~(Symbol0,@)", "int(int,int)", "int(int)", "String(int)", "String(String)", "~(Uint8List,String,int)", "Future<Null>()", "bool(NodeValidator)", "bool(String)", "Object?(Object?)", "String(int,int)", "Null(Event)", "ScriptElement*()", "int(@,@)", "~(ProgressEvent)", "~([Object?])", "~(String,String)", "@(@,String)", "Null(~())", "Null(@,StackTrace)", "~(Node,Node?)", "Null(@,@)", "@(@,@)", "JsFunction(@)", "JsArray<@>(@)", "JsObject(@)", "int(int,@)", "IndentingBuiltValueToStringHelper(String)", "ListBuilder<Object>()", "ListMultimapBuilder<Object,Object>()", "MapBuilder<Object,Object>()", "SetBuilder<Object>()", "SetMultimapBuilder<Object,Object>()", "~(int,@)", "~(@,StackTrace)", "~(String,int)", "~(String[@])", "bool(Object?)", "ListBuilder<ExtensionEvent*>*()", "ListBuilder<String*>*()", "String*(@)", "Logger()", "~(String?)", "~(Zone,ZoneDelegate,Zone,Object,StackTrace)", "~(String,String?)", "~(MessageEvent)", "Null(CloseEvent)", "bool(Object,Object)", "Promise<1&>*()", "Null(String*,String*)", "DebugEventBuilder*(DebugEventBuilder*)", "Null(String*)", "RegisterEventBuilder*(RegisterEventBuilder*)", "DevToolsRequestBuilder*(DevToolsRequestBuilder*)", "Future<Null>*(String*)", "Null(Event*)", "ConnectRequestBuilder*(ConnectRequestBuilder*)", "Null(Object*,StackTrace*)", "Null(MessageEvent*)", "List<String*>*(String*)", "int*(String*,String*)", "~(JsError*)", "ScriptElement*()*()", "Uint8List(@,@)", "@(String)", "Future<Null>*()", "~(Zone?,ZoneDelegate?,Zone,Object,StackTrace)", "0^(Zone?,ZoneDelegate?,Zone,0^())<Object?>", "0^(Zone?,ZoneDelegate?,Zone,0^(1^),1^)<Object?Object?>", "0^(Zone?,ZoneDelegate?,Zone,0^(1^,2^),1^,2^)<Object?Object?Object?>", "0^()(Zone,ZoneDelegate,Zone,0^())<Object?>", "0^(1^)(Zone,ZoneDelegate,Zone,0^(1^))<Object?Object?>", "0^(1^,2^)(Zone,ZoneDelegate,Zone,0^(1^,2^))<Object?Object?Object?>", "AsyncError?(Zone,ZoneDelegate,Zone,Object,StackTrace?)", "~(Zone?,ZoneDelegate?,Zone,~())", "Timer(Zone,ZoneDelegate,Zone,Duration,~())", "Timer(Zone,ZoneDelegate,Zone,Duration,~(Timer))", "~(Zone,ZoneDelegate,Zone,String)", "~(String)", "Zone(Zone?,ZoneDelegate?,Zone,ZoneSpecification?,Map<Object?,Object?>?)", "bool(Node)", "_Future<@>(@)"],
     interceptorsByTag: null,
     leafTags: null,
     arrayRti: Symbol("$ti")
@@ -25148,10 +25214,12 @@
       Level: findType("Level"),
       ListBuilder_dynamic: findType("ListBuilder<@>"),
       ListBuilder_legacy_ExtensionEvent: findType("ListBuilder<ExtensionEvent*>"),
+      ListBuilder_legacy_String: findType("ListBuilder<String*>"),
       ListEquality_dynamic: findType("ListEquality<@>"),
       ListMultimapBuilder_dynamic_dynamic: findType("ListMultimapBuilder<@,@>"),
       List_dynamic: findType("List<@>"),
       List_legacy_ExtensionEvent: findType("List<ExtensionEvent*>"),
+      List_legacy_String: findType("List<String*>"),
       List_nullable_Object: findType("List<Object?>"),
       Logger: findType("Logger"),
       MapBuilder_dynamic_dynamic: findType("MapBuilder<@,@>"),
@@ -25269,6 +25337,7 @@
       legacy_JsObject: findType("JsObject*"),
       legacy_KeyboardEvent: findType("KeyboardEvent*"),
       legacy_ListBuilder_legacy_ExtensionEvent: findType("ListBuilder<ExtensionEvent*>*"),
+      legacy_ListBuilder_legacy_String: findType("ListBuilder<String*>*"),
       legacy_List_legacy_String: findType("List<String*>*"),
       legacy_Map_dynamic_dynamic: findType("Map<@,@>*"),
       legacy_Map_of_legacy_String_and_legacy_String: findType("Map<String*,String*>*"),
@@ -25503,16 +25572,18 @@
     C.Type_BuiltSet_fcN = H.typeLiteral("BuiltSet<@>");
     C.List_yym = H._setArrayType(makeConstList([C.FullType_1MH]), type$.JSArray_legacy_FullType);
     C.FullType_4e8 = new U.FullType(C.Type_BuiltSet_fcN, C.List_yym, false);
+    C.Type_BuiltList_iTR = H.typeLiteral("BuiltList<@>");
+    C.Type_String_k8F = H.typeLiteral("String");
+    C.FullType_h8g = new U.FullType(C.Type_String_k8F, C.List_empty1, false);
+    C.List_CVN = H._setArrayType(makeConstList([C.FullType_h8g]), type$.JSArray_legacy_FullType);
+    C.FullType_6m4 = new U.FullType(C.Type_BuiltList_iTR, C.List_CVN, false);
     C.Type_BuildStatus_ahk = H.typeLiteral("BuildStatus");
     C.FullType_FuN = new U.FullType(C.Type_BuildStatus_ahk, C.List_empty1, false);
     C.Type_bool_lhE = H.typeLiteral("bool");
     C.FullType_MtR = new U.FullType(C.Type_bool_lhE, C.List_empty1, false);
     C.Type_BuiltSetMultimap_9Fi = H.typeLiteral("BuiltSetMultimap<@,@>");
     C.FullType_Ofx = new U.FullType(C.Type_BuiltSetMultimap_9Fi, C.List_a1A, false);
-    C.Type_BuiltList_iTR = H.typeLiteral("BuiltList<@>");
     C.FullType_eLJ = new U.FullType(C.Type_BuiltList_iTR, C.List_yym, false);
-    C.Type_String_k8F = H.typeLiteral("String");
-    C.FullType_h8g = new U.FullType(C.Type_String_k8F, C.List_empty1, false);
     C.Type_int_tHn = H.typeLiteral("int");
     C.FullType_kjq = new U.FullType(C.Type_int_tHn, C.List_empty1, false);
     C.FullType_null_List_empty_false = new U.FullType(null, C.List_empty1, false);
@@ -25871,6 +25942,7 @@
       t1.add$1(0, $.$get$_$registerEventSerializer());
       t1.add$1(0, $.$get$_$runRequestSerializer());
       t1.addBuilderFactory$2(C.FullType_w24, new K._$serializers_closure());
+      t1.addBuilderFactory$2(C.FullType_6m4, new K._$serializers_closure0());
       return t1.build$0();
     });
     _lazyFinal($, "Logger_root", "$get$Logger_root", function() {
@@ -25993,10 +26065,10 @@
   Function.prototype.call$2$3 = function(a, b, c) {
     return this(a, b, c);
   };
-  Function.prototype.call$2$0 = function() {
+  Function.prototype.call$1$0 = function() {
     return this();
   };
-  Function.prototype.call$1$0 = function() {
+  Function.prototype.call$2$0 = function() {
     return this();
   };
   convertAllToFastObject(holders);

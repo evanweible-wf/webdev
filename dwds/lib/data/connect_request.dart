@@ -4,6 +4,7 @@
 
 // @dart = 2.9
 
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
@@ -26,6 +27,6 @@ abstract class ConnectRequest
   /// Identifies a given instance of an application, unique per tab/window.
   String get instanceId;
 
-  /// The entrypoint for the Dart application.
-  String get entrypointPath;
+  /// The entrypoints for the Dart application.
+  BuiltList<String> get entrypointPaths;
 }

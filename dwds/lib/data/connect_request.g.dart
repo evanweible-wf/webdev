@@ -27,9 +27,10 @@ class _$ConnectRequestSerializer
       'instanceId',
       serializers.serialize(object.instanceId,
           specifiedType: const FullType(String)),
-      'entrypointPath',
-      serializers.serialize(object.entrypointPath,
-          specifiedType: const FullType(String)),
+      'entrypointPaths',
+      serializers.serialize(object.entrypointPaths,
+          specifiedType:
+              const FullType(BuiltList, const [const FullType(String)])),
     ];
 
     return result;
@@ -55,9 +56,11 @@ class _$ConnectRequestSerializer
           result.instanceId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
-        case 'entrypointPath':
-          result.entrypointPath = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+        case 'entrypointPaths':
+          result.entrypointPaths.replace(serializers.deserialize(value,
+                  specifiedType:
+                      const FullType(BuiltList, const [const FullType(String)]))
+              as BuiltList<Object>);
           break;
       }
     }
@@ -72,18 +75,18 @@ class _$ConnectRequest extends ConnectRequest {
   @override
   final String instanceId;
   @override
-  final String entrypointPath;
+  final BuiltList<String> entrypointPaths;
 
   factory _$ConnectRequest([void Function(ConnectRequestBuilder) updates]) =>
       (new ConnectRequestBuilder()..update(updates)).build();
 
-  _$ConnectRequest._({this.appId, this.instanceId, this.entrypointPath})
+  _$ConnectRequest._({this.appId, this.instanceId, this.entrypointPaths})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(appId, 'ConnectRequest', 'appId');
     BuiltValueNullFieldError.checkNotNull(
         instanceId, 'ConnectRequest', 'instanceId');
     BuiltValueNullFieldError.checkNotNull(
-        entrypointPath, 'ConnectRequest', 'entrypointPath');
+        entrypointPaths, 'ConnectRequest', 'entrypointPaths');
   }
 
   @override
@@ -100,13 +103,13 @@ class _$ConnectRequest extends ConnectRequest {
     return other is ConnectRequest &&
         appId == other.appId &&
         instanceId == other.instanceId &&
-        entrypointPath == other.entrypointPath;
+        entrypointPaths == other.entrypointPaths;
   }
 
   @override
   int get hashCode {
     return $jf($jc($jc($jc(0, appId.hashCode), instanceId.hashCode),
-        entrypointPath.hashCode));
+        entrypointPaths.hashCode));
   }
 
   @override
@@ -114,7 +117,7 @@ class _$ConnectRequest extends ConnectRequest {
     return (newBuiltValueToStringHelper('ConnectRequest')
           ..add('appId', appId)
           ..add('instanceId', instanceId)
-          ..add('entrypointPath', entrypointPath))
+          ..add('entrypointPaths', entrypointPaths))
         .toString();
   }
 }
@@ -131,10 +134,11 @@ class ConnectRequestBuilder
   String get instanceId => _$this._instanceId;
   set instanceId(String instanceId) => _$this._instanceId = instanceId;
 
-  String _entrypointPath;
-  String get entrypointPath => _$this._entrypointPath;
-  set entrypointPath(String entrypointPath) =>
-      _$this._entrypointPath = entrypointPath;
+  ListBuilder<String> _entrypointPaths;
+  ListBuilder<String> get entrypointPaths =>
+      _$this._entrypointPaths ??= new ListBuilder<String>();
+  set entrypointPaths(ListBuilder<String> entrypointPaths) =>
+      _$this._entrypointPaths = entrypointPaths;
 
   ConnectRequestBuilder();
 
@@ -143,7 +147,7 @@ class ConnectRequestBuilder
     if ($v != null) {
       _appId = $v.appId;
       _instanceId = $v.instanceId;
-      _entrypointPath = $v.entrypointPath;
+      _entrypointPaths = $v.entrypointPaths.toBuilder();
       _$v = null;
     }
     return this;
@@ -162,14 +166,26 @@ class ConnectRequestBuilder
 
   @override
   _$ConnectRequest build() {
-    final _$result = _$v ??
-        new _$ConnectRequest._(
-            appId: BuiltValueNullFieldError.checkNotNull(
-                appId, 'ConnectRequest', 'appId'),
-            instanceId: BuiltValueNullFieldError.checkNotNull(
-                instanceId, 'ConnectRequest', 'instanceId'),
-            entrypointPath: BuiltValueNullFieldError.checkNotNull(
-                entrypointPath, 'ConnectRequest', 'entrypointPath'));
+    _$ConnectRequest _$result;
+    try {
+      _$result = _$v ??
+          new _$ConnectRequest._(
+              appId: BuiltValueNullFieldError.checkNotNull(
+                  appId, 'ConnectRequest', 'appId'),
+              instanceId: BuiltValueNullFieldError.checkNotNull(
+                  instanceId, 'ConnectRequest', 'instanceId'),
+              entrypointPaths: entrypointPaths.build());
+    } catch (_) {
+      String _$failedField;
+      try {
+        _$failedField = 'entrypointPaths';
+        entrypointPaths.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            'ConnectRequest', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

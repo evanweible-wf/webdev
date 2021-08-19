@@ -25,7 +25,7 @@ class Modules {
 
   final Map<String, String> _libraryToModule = {};
 
-  String _entrypoint;
+  Iterable<String> _entrypoints;
 
   Modules(String root) : _root = root == '' ? '/' : root;
 
@@ -33,14 +33,14 @@ class Modules {
   ///
   /// Intended to be called multiple times throughout the development workflow,
   /// e.g. after a hot-reload.
-  void initialize(String entrypoint) {
+  void initialize(Iterable<String> entrypoints) {
     // We only clear the source to module mapping as script IDs may persist
     // across hot reloads.
     _sourceToModule.clear();
     _sourceToLibrary.clear();
     _libraryToModule.clear();
     _moduleMemoizer = AsyncMemoizer();
-    _entrypoint = entrypoint;
+    _entrypoints = entrypoints;
   }
 
   /// Returns the module for the Chrome script ID.
@@ -71,27 +71,29 @@ class Modules {
 
   /// Initializes [_sourceToModule] and [_sourceToLibrary].
   Future<void> _initializeMapping() async {
-    var provider = globalLoadStrategy.metadataProviderFor(_entrypoint);
+    for (var entrypoint in _entrypoints) {
+      var provider = globalLoadStrategy.metadataProviderFor(entrypoint);
 
-    var libraryToScripts = await provider.scripts;
-    var scriptToModule = await provider.scriptToModule;
+      var libraryToScripts = await provider.scripts;
+      var scriptToModule = await provider.scriptToModule;
 
-    for (var library in libraryToScripts.keys) {
-      var libraryServerPath = library.startsWith('dart:')
-          ? library
-          : DartUri(library, _root).serverPath;
+      for (var library in libraryToScripts.keys) {
+        var libraryServerPath = library.startsWith('dart:')
+            ? library
+            : DartUri(library, _root).serverPath;
 
-      _sourceToModule[libraryServerPath] = scriptToModule[library];
-      _sourceToLibrary[libraryServerPath] = Uri.parse(library);
-      _libraryToModule[library] = scriptToModule[library];
+        _sourceToModule[libraryServerPath] = scriptToModule[library];
+        _sourceToLibrary[libraryServerPath] = Uri.parse(library);
+        _libraryToModule[library] = scriptToModule[library];
 
-      for (var script in libraryToScripts[library]) {
-        var scriptServerPath = script.startsWith('dart:')
-            ? script
-            : DartUri(script, _root).serverPath;
+        for (var script in libraryToScripts[library]) {
+          var scriptServerPath = script.startsWith('dart:')
+              ? script
+              : DartUri(script, _root).serverPath;
 
-        _sourceToModule[scriptServerPath] = scriptToModule[library];
-        _sourceToLibrary[scriptServerPath] = Uri.parse(library);
+          _sourceToModule[scriptServerPath] = scriptToModule[library];
+          _sourceToLibrary[scriptServerPath] = Uri.parse(library);
+        }
       }
     }
   }

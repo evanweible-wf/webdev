@@ -173,6 +173,7 @@ String _injectClientAndHoistMain(
     $mainFunction();
   }
   window.\$dartMainTearOffs.push($mainFunction);
+  window.\$dartEntrypointPaths.push("$entrypointPath");
   ''';
   result += bodyLines.sublist(extensionIndex + 2).join('\n');
   return result;
@@ -194,7 +195,7 @@ String _injectedClientSnippet(
       'window.\$dwdsVersion = "$packageVersion";\n'
       'window.\$dwdsDevHandlerPath = "$devHandlerPath";\n'
       'window.\$dwdsEnableDevtoolsLaunch = $enableDevtoolsLaunch;\n'
-      'window.\$dartEntrypointPath = "$entrypointPath";\n'
+      'window.\$dartEntrypointPaths = new Array();\n'
       '${loadStrategy.loadClientSnippet(_clientScript)}';
   if (extensionUri != null) {
     injectedBody += 'window.\$dartExtensionUri = "$extensionUri";\n';

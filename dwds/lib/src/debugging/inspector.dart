@@ -491,9 +491,10 @@ function($argsString) {
   /// reload the inspector will get re-created.
   Future<void> _populateScriptCaches() async {
     var libraryUris = [for (var library in isolate.libraries) library.uri];
-    var scripts = await globalLoadStrategy
-        .metadataProviderFor(appConnection.request.entrypointPath)
-        .scripts;
+    var scripts = {
+      for (var entrypointPath in appConnection.request.entrypointPaths)
+        ...await globalLoadStrategy.metadataProviderFor(entrypointPath).scripts,
+    };
     // For all the non-dart: libraries, find their parts and create scriptRefs
     // for them.
     var userLibraries = libraryUris.where((uri) => !uri.startsWith('dart:'));

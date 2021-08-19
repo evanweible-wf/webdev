@@ -161,34 +161,45 @@ class ChromeProxyService implements VmServiceInterface {
   }
 
   /// Initializes metdata in [Locations], [Modules], and [ExpressionCompiler].
-  Future<void> _initializeEntrypoint(String entrypoint) async {
-    _locations.initialize(entrypoint);
-    _modules.initialize(entrypoint);
+  Future<void> _initializeEntrypoints(Iterable<String> entrypoints) async {
+    _locations.initialize(entrypoints);
+    _modules.initialize(entrypoints);
     _skipLists.initialize();
     // We do not need to wait for compiler dependencies to be udpated as the
     // [ExpressionEvaluator] is robust to evaluation requests during updates.
-    unawaited(_updateCompilerDependencies(entrypoint));
+    unawaited(_updateCompilerDependencies(entrypoints));
   }
 
-  Future<void> _updateCompilerDependencies(String entrypoint) async {
-    var metadataProvider = globalLoadStrategy.metadataProviderFor(entrypoint);
+  Future<void> _updateCompilerDependencies(Iterable<String> entrypoints) async {
     var moduleFormat = globalLoadStrategy.moduleFormat;
-    var soundNullSafety = await metadataProvider.soundNullSafety;
+    // Force the provider for each entrypoint to initialize.
+    var metadataProviders =
+        entrypoints.map(globalLoadStrategy.metadataProviderFor);
+    await Future.wait(metadataProviders.map((mp) => mp.modules));
+    // We're sharing a single compiler across all entrypoints for simplicity and
+    // because expression evaluation requests don't include a reference to the
+    // entrypoint. For this reason, we arbitrarily choose the first entrypoint
+    // to determine sound null safety. In other words, we assume it to be the
+    // same across all entrypoints.
+    // TODO(evanweible) - warn user if entrypoints disagree?
+    var soundNullSafety = await metadataProviders.first.soundNullSafety;
 
-    _logger.info('Initializing expression compiler for $entrypoint '
+    _logger.info('Initializing expression compiler for $entrypoints '
         'with sound null safety: $soundNullSafety');
 
     if (_compiler != null) {
       await _compiler?.initialize(
           moduleFormat: moduleFormat, soundNullSafety: soundNullSafety);
-      var dependencies =
-          await globalLoadStrategy.moduleInfoForEntrypoint(entrypoint);
+      var dependencies = {
+        for (var entrypoint in entrypoints)
+          ...await globalLoadStrategy.moduleInfoForEntrypoint(entrypoint),
+      };
       var stopwatch = Stopwatch()..start();
       await _compiler.updateDependencies(dependencies);
       // Expression evaluation is ready after dependencies are updated.
       if (!_compilerCompleter.isCompleted) _compilerCompleter.complete();
       emitEvent(DwdsEvent('COMPILER_UPDATE_DEPENDENCIES', {
-        'entrypoint': entrypoint,
+        'entrypoints': entrypoints,
         'elapsedMilliseconds': stopwatch.elapsedMilliseconds,
       }));
     }
@@ -212,7 +223,7 @@ class ChromeProxyService implements VmServiceInterface {
     // the expression compiler service will fail to start.
     // Issue: https://github.com/dart-lang/webdev/issues/1282
     var debugger = await _debugger;
-    await _initializeEntrypoint(appConnection.request.entrypointPath);
+    await _initializeEntrypoints(appConnection.request.entrypointPaths);
 
     debugger.notifyPausedAtStart();
     _inspector = await AppInspector.initialize(

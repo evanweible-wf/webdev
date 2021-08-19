@@ -87,6 +87,11 @@ abstract class LoadStrategy {
   ///
   Future<String> moduleForServerPath(String entrypoint, String serverPath);
 
+  Future<String> moduleForServerPath2(
+          Iterable<String> entrypoints, String serverPath) =>
+      _bestResultFromEntrypoints(
+          entrypoints, (e) => moduleForServerPath(e, serverPath));
+
   /// Returns the server path for the provided module.
   ///
   /// For example:
@@ -95,6 +100,11 @@ abstract class LoadStrategy {
   ///
   Future<String> serverPathForModule(String entrypoint, String module);
 
+  Future<String> serverPathForModule2(
+          Iterable<String> entrypoints, String module) =>
+      _bestResultFromEntrypoints(
+          entrypoints, (e) => serverPathForModule(e, module));
+
   /// Returns the source map path for the provided module.
   ///
   /// For example:
@@ -102,6 +112,11 @@ abstract class LoadStrategy {
   ///   web/main -> main.ddc.js.map
   ///
   Future<String> sourceMapPathForModule(String entrypoint, String module);
+
+  Future<String> sourceMapPathForModule2(
+          Iterable<String> entrypoints, String module) =>
+      _bestResultFromEntrypoints(
+          entrypoints, (e) => sourceMapPathForModule(e, module));
 
   /// Returns a map from module id to module info for the provided entrypoint.
   ///
@@ -131,6 +146,17 @@ abstract class LoadStrategy {
   void trackEntrypoint(String entrypoint) {
     var metadataProvider = MetadataProvider(entrypoint, _assetReader);
     _providers[metadataProvider.entrypoint] = metadataProvider;
+  }
+
+  Future<String> _bestResultFromEntrypoints<T>(Iterable<String> entrypoints,
+      Future<String> Function(String entrypoint) fn) async {
+    for (var entrypoint in entrypoints) {
+      var result = await fn(entrypoint);
+      if (result?.isNotEmpty ?? false) {
+        return result;
+      }
+    }
+    return null;
   }
 }
 

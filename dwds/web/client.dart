@@ -11,6 +11,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 
+import 'package:built_collection/built_collection.dart';
 import 'package:dwds/data/build_result.dart';
 import 'package:dwds/data/connect_request.dart';
 import 'package:dwds/data/debug_event.dart';
@@ -139,7 +140,7 @@ Future<void> main() {
       client.sink.add(jsonEncode(serializers.serialize(ConnectRequest((b) => b
         ..appId = dartAppId
         ..instanceId = dartAppInstanceId
-        ..entrypointPath = dartEntrypointPath))));
+        ..entrypointPaths = ListBuilder(dartEntrypointPaths)))));
     } else {
       // If not Chromium we just invoke main, devtools aren't supported.
       runMain();
@@ -207,8 +208,10 @@ external set launchDevToolsJs(void Function() cb);
 @JS(r'$dartReloadConfiguration')
 external String get reloadConfiguration;
 
-@JS(r'$dartEntrypointPath')
-external String get dartEntrypointPath;
+@JS(r'$dartEntrypointPaths')
+external List get _dartEntrypointPaths;
+List<String> get dartEntrypointPaths =>
+    List<String>.from(_dartEntrypointPaths.cast<String>());
 
 @JS(r'$dwdsEnableDevtoolsLaunch')
 external bool get dwdsEnableDevtoolsLaunch;
